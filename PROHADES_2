@@ -1,0 +1,22 @@
+import pytesseract
+from PIL import Image
+
+def cek_konten_gambar(nama_file):
+    image = Image.open(nama_file)
+    teks = pytesseract.image_to_string(image)
+
+    teks = teks.lower()
+    kata_kekerasan = ["darah", "pukulan", "bunuh", "tembak"]
+    kata_lgbtq = ["lgbt", "gay", "lesbian", "transgender"]
+
+    flag_kekerasan = any(kata in teks for kata in kata_kekerasan)
+    flag_lgbt = any(kata in teks for kata in kata_lgbtq)
+
+    hasil = []
+    if flag_kekerasan: hasil.append("Mengandung unsur kekerasan")
+    if flag_lgbt: hasil.append("Mengandung unsur LGBTQ+")
+    if not hasil: hasil.append("Aman untuk anak")
+
+    return hasil
+
+cek_konten_gambar(image)
